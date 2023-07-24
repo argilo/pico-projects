@@ -22,14 +22,26 @@ ntp_host = "pool.ntp.org"
 def ntptime():
     ntp_query = bytearray(48)
     ntp_query[0] = 0x1B
-    addr = socket.getaddrinfo(ntp_host, 123)[0][-1]
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.settimeout(2)
-        res = s.sendto(ntp_query, addr)
-        msg = s.recv(48)
-    finally:
-        s.close()
+
+    while True:
+        try:
+            addr = socket.getaddrinfo(ntp_host, 123)[0][-1]
+            break
+        except OSError:
+            time.sleep(5)
+
+    while True:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.settimeout(2)
+            res = s.sendto(ntp_query, addr)
+            msg = s.recv(48)
+            break
+        except OSError:
+            time.sleep(30)
+        finally:
+            s.close()
+
     val = struct.unpack("!I", msg[40:44])[0]
     t = val - 2208988800
     tm = time.gmtime(t)
@@ -81,7 +93,7 @@ while True:
 
     if wlan.status() == 3:
         break
-    else:    
+    else:
         led.set_rgb(128, 0, 0)
         time.sleep(1)
         led.set_rgb(0, 0, 0)
