@@ -68,16 +68,16 @@ def display(data):
     graphics.clear()
     graphics.set_pen(0 if door_status == b"closed" else 15)
     for i, (_, (name, temp, hum)) in enumerate(sorted(data.items(), key=lambda x: CONFIG.ORDER[x[0]])):
-        y = 15 + 25*i
-        graphics.text(name, 5, y, scale=0.8)
+        y = 7 + 19*i
+        graphics.text(name, 5, y, scale=0.6)
 
         text = f"{temp:5.1f}"
-        width = graphics.measure_text(text, scale=0.8)
-        graphics.text(text, 225-width, y, scale=0.8)
+        width = graphics.measure_text(text, scale=0.6)
+        graphics.text(text, 230-width, y, scale=0.6)
 
         text = f"{int(hum):02}%"
-        width = graphics.measure_text(text, scale=0.8)
-        graphics.text(text, 295-width, y, scale=0.8)
+        width = graphics.measure_text(text, scale=0.6)
+        graphics.text(text, 295-width, y, scale=0.6)
 
     graphics.update()
 
