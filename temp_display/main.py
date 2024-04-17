@@ -64,20 +64,21 @@ graphics.update()
 
 
 def display(data):
+    text_size = 0.7
     graphics.set_pen(15 if door_status == b"closed" else 0)
     graphics.clear()
     graphics.set_pen(0 if door_status == b"closed" else 15)
-    for i, (_, (name, temp, hum)) in enumerate(sorted(data.items(), key=lambda x: CONFIG.ORDER[x[0]])):
-        y = 7 + 19*i
-        graphics.text(name, 5, y, scale=0.6)
+    for i, (_, (name, temp, hum)) in enumerate(sorted(data.items(), key=lambda x: CONFIG.ORDER.get(x[0], 100))):
+        y = 9 + 22*i
+        graphics.text(name, 5, y, scale=text_size)
 
         text = f"{temp:5.1f}"
-        width = graphics.measure_text(text, scale=0.6)
-        graphics.text(text, 230-width, y, scale=0.6)
+        width = graphics.measure_text(text, scale=text_size)
+        graphics.text(text, 230-width, y, scale=text_size)
 
         text = f"{int(hum):02}%"
-        width = graphics.measure_text(text, scale=0.6)
-        graphics.text(text, 295-width, y, scale=0.6)
+        width = graphics.measure_text(text, scale=text_size)
+        graphics.text(text, 295-width, y, scale=text_size)
 
     graphics.update()
 
